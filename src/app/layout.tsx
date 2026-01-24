@@ -19,8 +19,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio | Web Developer",
-  description: "A modern web developer portfolio built with Next.js and Tailwind CSS.",
+  title: "Rakhadinar Jaladara | Web Developer",
+  description: "Rakhadinar Jaladara is a web developer with a passion for creating beautiful and functional websites.",
 };
 
 export default function RootLayout({
