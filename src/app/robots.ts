@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: "*",
             allow: "/",
         },
-        sitemap: "https://example.com/sitemap.xml", // Replace with actual domain later
+        sitemap: "https://www.rkhdnr.my.id/sitemap.xml", // Replace with actual domain later
     };
 }
