@@ -9,22 +9,22 @@ export function Footer() {
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
                     <div className="flex flex-col items-center gap-2 md:items-start">
-                        <span className="text-xl font-bold tracking-tight text-white">Portfolio.</span>
+                        <span className="text-xl font-bold tracking-tight text-white">rkhdnr.</span>
                         <p className="text-sm text-zinc-400">
-                            © {new Date().getFullYear()} Built with Next.js & Tailwind CSS.
+                            © {new Date().getFullYear()} Built with zero code, just AI prompts.
                         </p>
                     </div>
 
                     <div className="flex gap-6">
-                        <Link href="https://github.com" className="text-zinc-400 transition-colors hover:text-white">
+                        <Link href="https://github.com/rakha00" className="text-zinc-400 transition-colors hover:text-white">
                             <Github className="h-5 w-5" />
                             <span className="sr-only">GitHub</span>
                         </Link>
-                        <Link href="https://linkedin.com" className="text-zinc-400 transition-colors hover:text-white">
+                        <Link href="https://www.linkedin.com/in/rakhadinar-jaladara/" className="text-zinc-400 transition-colors hover:text-white">
                             <Linkedin className="h-5 w-5" />
                             <span className="sr-only">LinkedIn</span>
                         </Link>
-                        <Link href="mailto:example@example.com" className="text-zinc-400 transition-colors hover:text-white">
+                        <Link href="mailto:rkhdinar00@gmail.com" className="text-zinc-400 transition-colors hover:text-white">
                             <Mail className="h-5 w-5" />
                             <span className="sr-only">Email</span>
                         </Link>
