@@ -245,7 +245,7 @@ function SkillTile({ skill, selected, onClick }: { skill: Skill, selected: boole
                     <img
                         src={skill.iconUrl}
                         alt={skill.name}
-                        className="w-full h-full object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                        className={`w-full h-full object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110 ${skill.id === 'filament' || skill.id === 'nextjs' ? 'invert' : ''}`}
                     />
                 ) : (
                     <skill.icon className={`w-full h-full ${selected ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-300"}`} />

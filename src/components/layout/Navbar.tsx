@@ -28,9 +28,9 @@ export function Navbar() {
     return (
         <nav
             className={cn(
-                "fixed top-0 z-50 w-full transition-all duration-300",
+                "fixed top-0 z-50 w-full transition-all duration-500",
                 scrolled
-                    ? "bg-background/80 backdrop-blur-md border-b border-border/50 shadow-sm"
+                    ? "bg-background/80 backdrop-blur-xl shadow-sm"
                     : "bg-transparent"
             )}
         >
@@ -38,7 +38,7 @@ export function Navbar() {
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex-shrink-0">
                         <Link href="/" className="text-xl font-bold tracking-tighter text-foreground hover:text-primary transition-colors">
-                            Portfolio<span className="text-indigo-500">.</span>
+                            rkhdnr<span className="text-indigo-500">.</span>
                         </Link>
                     </div>
 
@@ -59,7 +59,7 @@ export function Navbar() {
 
                     <div className="hidden md:flex items-center space-x-4">
                         {/* Social placeholders or Resume button */}
-                        <a href="https://github.com" target="_blank" className="text-muted-foreground hover:text-foreground">
+                        <a href="https://github.com/rakha00" target="_blank" className="text-muted-foreground hover:text-foreground">
                             <Github className="w-5 h-5" />
                         </a>
                     </div>

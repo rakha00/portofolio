@@ -22,7 +22,7 @@ export function About() {
                     >
                         <div className="flex items-center gap-2 text-indigo-400 font-mono text-sm mb-6 uppercase tracking-widest">
                             <span className="w-12 h-[1px] bg-indigo-500"></span>
-                            01. About Me
+                            About Me
                         </div>
 
                         <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-8 leading-tight">
