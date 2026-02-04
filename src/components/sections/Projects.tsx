@@ -16,26 +16,47 @@ interface Project {
     features?: string[];
 }
 
-const featuredProject: Project = {
-    title: "Global Servis Int.",
-    role: "Freelance Fullstack Developer",
-    description: "A comprehensive production system for inventory, attendance, invoicing, and e-commerce management. Built to streamline operations for a service-based business.",
-    tech: ["Laravel", "MySQL", "Livewire", "Filament", "Tailwind"],
-    images: [
-        "/projects/globalservis.webp",
-        "/projects/globalservis-2.webp",
-        "/projects/globalservis-3.webp",
-        "/projects/globalservis-4.webp",
-    ],
-    liveUrl: "https://globalservis-int.com",
-    repoUrl: "https://github.com/rakha00/ac-management-e-commerce",
-    features: [
-        "QR-based attendance system with geo-fencing & photo verification",
-        "Role-based Access Control (Super Admin, Staff, Technician, Sales)",
-        "Automated PDF Invoicing & Delivery Notes generation",
-        "Real-time Inventory Management & Excel Reporting"
-    ]
-};
+const featuredProjects: Project[] = [
+    {
+        title: "Global Servis Int.",
+        role: "Freelance Fullstack Developer",
+        description: "A comprehensive production system for inventory, attendance, invoicing, and e-commerce management. Built to streamline operations for a service-based business.",
+        tech: ["Laravel", "MySQL", "Livewire", "Filament", "Tailwind"],
+        images: [
+            "/projects/globalservis/globalservis-1.webp",
+            "/projects/globalservis/globalservis-2.webp",
+            "/projects/globalservis/globalservis-3.webp",
+            "/projects/globalservis/globalservis-4.webp",
+        ],
+        liveUrl: "https://globalservis-int.com",
+        repoUrl: "https://github.com/rakha00/ac-management-e-commerce",
+        features: [
+            "QR-based attendance system with geo-fencing & photo verification",
+            "Role-based Access Control (Super Admin, Staff, Technician, Sales)",
+            "Automated PDF Invoicing & Delivery Notes generation",
+            "Real-time Inventory Management & Excel Reporting"
+        ]
+    },
+    {
+        title: "Mie Newmind",
+        role: "Frontend Developer",
+        description: "A modern, premium restaurant franchise promotion website built with Next.js 16 and Tailwind CSS v4.",
+        tech: ["NextJs", "TypeScript", "Tailwind", "FramerMotion", "MDX"],
+        images: [
+            "/projects/mienewmind/mienewmind-1.webp",
+            "/projects/mienewmind/mienewmind-2.webp",
+            "/projects/mienewmind/mienewmind-3.webp",
+            "/projects/mienewmind/mienewmind-4.webp",
+        ],
+        liveUrl: "https://mie-newmind.vercel.app/",
+        repoUrl: "https://github.com/rakha00/mie-newmind",
+        features: [
+            "Responsive Design: Fully responsive layout for all devices.",
+            "Modern UI/UX: clean, aesthetic, and dynamic interface using Framer Motion.",
+            "Franchise Information: Detailed investment and partnership opportunities.",
+        ]
+    }
+];
 
 const otherProjects: Project[] = [
     {
@@ -212,8 +233,12 @@ export function Projects() {
                     </h2>
                 </div>
 
-                {/* Featured Project */}
-                <FeaturedProject project={featuredProject} />
+                {/* Featured Projects */}
+                <div>
+                    {featuredProjects.map((project, index) => (
+                        <FeaturedProject key={project.title} project={project} />
+                    ))}
+                </div>
 
                 {/* Other Projects Grid */}
                 <div className="mt-24">
