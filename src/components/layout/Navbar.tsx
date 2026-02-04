@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Github, Linkedin, Mail } from "lucide-react";
+import { Menu, X, Github } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [

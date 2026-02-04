@@ -4,8 +4,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Code, Database, Globe, Layout, Server, Terminal, Layers, LayoutDashboard, FileJson } from "lucide-react";
 import { Highlight, themes, Prism } from "prism-react-renderer";
+import Image from "next/image";
 
 (typeof global !== "undefined" ? global : window).Prism = Prism;
+/* eslint-disable @typescript-eslint/no-require-imports */
 require("prismjs/components/prism-markup-templating"); // Required for PHP
 require("prismjs/components/prism-php");
 require("prismjs/components/prism-bash");
@@ -14,6 +16,7 @@ require("prismjs/components/prism-javascript");
 require("prismjs/components/prism-typescript");
 require("prismjs/components/prism-jsx");
 require("prismjs/components/prism-tsx");
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 interface Skill {
     id: string;
@@ -39,7 +42,6 @@ const skills: Skill[] = [
 
 use Illuminate\\Support\\Facades\\Route;
 
-// Define a robust API endpoint
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -82,8 +84,7 @@ public static function form(Form $form): Form
         iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg",
         description: "The React Framework for the Web. Used for building performant full-stack web applications.",
         language: "tsx",
-        code: `// app/products/page.tsx
-export default async function Products() {
+        code: `export default async function Products() {
   const data = await getData();
 
   return (
@@ -144,8 +145,7 @@ function UserProfile({ id }) {
         iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
         description: "The programming language of the Web. Used to create dynamic content and handle client-side logic.",
         language: "javascript",
-        code: `// Modern ES6+ Syntax
-const processData = async (url) => {
+        code: `const processData = async (url) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -198,8 +198,7 @@ LIMIT 5;`
         iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg",
         description: "A general purpose, document-based, distributed database built for modern application developers.",
         language: "javascript",
-        code: `// Aggregation Pipeline
-db.orders.aggregate([
+        code: `db.orders.aggregate([
   { $match: { status: "shipped" } },
   { $group: { 
       _id: "$region", 
@@ -240,12 +239,13 @@ function SkillTile({ skill, selected, onClick }: { skill: Skill, selected: boole
       `}
         >
             {/* Icon */}
-            <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+            <div className="relative w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
                 {skill.iconUrl ? (
-                    <img
+                    <Image
                         src={skill.iconUrl}
                         alt={skill.name}
-                        className={`w-full h-full object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110 ${skill.id === 'filament' || skill.id === 'nextjs' ? 'invert' : ''}`}
+                        fill
+                        className={`object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110 ${skill.id === 'filament' || skill.id === 'nextjs' ? 'invert' : ''}`}
                     />
                 ) : (
                     <skill.icon className={`w-full h-full ${selected ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-300"}`} />
@@ -312,7 +312,13 @@ export function Skills() {
                                             <div className="flex items-center gap-3 mb-4">
                                                 <div className="p-2 bg-indigo-500/10 rounded-lg lg:hidden">
                                                     {selectedSkill.iconUrl ? (
-                                                        <img src={selectedSkill.iconUrl} className="w-6 h-6 object-contain" />
+                                                        <Image
+                                                            src={selectedSkill.iconUrl}
+                                                            alt={selectedSkill.name}
+                                                            width={24}
+                                                            height={24}
+                                                            className="w-full h-full object-contain"
+                                                        />
                                                     ) : null}
                                                 </div>
 
@@ -349,7 +355,7 @@ export function Skills() {
                                                     code={selectedSkill.code}
                                                     language={selectedSkill.language}
                                                 >
-                                                    {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                                                    {({ style, tokens, getLineProps, getTokenProps }) => (
                                                         <pre
                                                             className="p-6 overflow-auto h-full text-sm font-mono leading-relaxed bg-transparent scrollbar-custom"
                                                             style={{ ...style, backgroundColor: 'transparent' }}

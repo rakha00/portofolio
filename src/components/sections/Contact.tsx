@@ -4,6 +4,180 @@ import { motion } from "framer-motion";
 import { Mail, ArrowRight } from "lucide-react";
 import { useEffect, useRef } from "react";
 
+class Ripple {
+    x: number;
+    y: number;
+    radius: number;
+    maxRadius: number;
+    alpha: number;
+    speed: number;
+
+    constructor(x: number, y: number, isBig: boolean = false) {
+        this.x = x;
+        this.y = y;
+        this.radius = 0;
+        this.maxRadius = isBig ? 100 : 30;
+        this.alpha = isBig ? 0.8 : 0.3;
+        this.speed = isBig ? 1.5 : 0.8;
+    }
+
+    update() {
+        this.radius += this.speed;
+        this.alpha -= 0.01;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${this.alpha})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+    }
+}
+
+class Food {
+    x: number;
+    y: number;
+    size: number;
+    vy: number;
+    alpha: number;
+
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        this.size = 0;
+        this.vy = 0;
+        this.alpha = 1;
+    }
+
+    update() {
+        // Grow effect on spawn
+        if (this.size < 3) this.size += 0.2;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = `rgba(189, 142, 108, ${this.alpha})`; // Brownish pellet
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+class Fish {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    size: number;
+    color: string;
+    speed: number;
+    angle: number;
+    targetAngle: number;
+
+    constructor(canvasWidth: number, canvasHeight: number) {
+        this.x = Math.random() * canvasWidth;
+        this.y = Math.random() * canvasHeight;
+        this.angle = Math.random() * Math.PI * 2;
+        this.targetAngle = this.angle;
+        this.speed = 1 + Math.random() * 1;
+        this.vx = 0;
+        this.vy = 0;
+        this.size = 5 + Math.random() * 5;
+        const colors = ["#ff5733", "#f2f2f2", "#d32f2f", "#ffca28"];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    update(foods: Food[], ripples: Ripple[], canvasWidth: number, canvasHeight: number) {
+        // Seek food logic
+        let targetX = this.x + Math.cos(this.angle) * 100;
+        let targetY = this.y + Math.sin(this.angle) * 100;
+        let chasing = false;
+
+        if (foods.length > 0) {
+            let closestFood: Food | null = null;
+            let minDist = 300; // Awareness radius
+
+            for (const food of foods) {
+                const dx = food.x - this.x;
+                const dy = food.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closestFood = food;
+                }
+            }
+
+            if (closestFood) {
+                targetX = closestFood.x;
+                targetY = closestFood.y;
+                chasing = true;
+
+                // Interaction: Eat food
+                if (minDist < 10) {
+                    const index = foods.indexOf(closestFood);
+                    if (index > -1) foods.splice(index, 1);
+                    // Ripple on eat
+                    ripples.push(new Ripple(this.x, this.y, false));
+                }
+            }
+        }
+
+        // Smooth rotation
+        const angleToTarget = Math.atan2(targetY - this.y, targetX - this.x);
+        let diff = angleToTarget - this.angle;
+        while (diff <= -Math.PI) diff += Math.PI * 2;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+
+        // Turn speed
+        const turnSpeed = chasing ? 0.08 : 0.03;
+        this.angle += diff * turnSpeed;
+
+        // Speed adjustment
+        const targetSpeed = chasing ? 3.5 : 1.5;
+        this.speed += (targetSpeed - this.speed) * 0.05;
+
+        // Move
+        this.vx = Math.cos(this.angle) * this.speed;
+        this.vy = Math.sin(this.angle) * this.speed;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Screen Wrap
+        const margin = 50;
+        if (this.x < -margin) this.x = canvasWidth + margin;
+        if (this.x > canvasWidth + margin) this.x = -margin;
+        if (this.y < -margin) this.y = canvasHeight + margin;
+        if (this.y > canvasHeight + margin) this.y = -margin;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+
+        // Body
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        // Simpler, elegant fish shape
+        ctx.ellipse(0, 0, this.size * 2, this.size * 0.8, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Tail (animated slightly)
+        const tailWag = Math.sin(Date.now() * 0.01) * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(-this.size * 1.5, 0);
+        ctx.lineTo(-this.size * 3, -this.size + tailWag);
+        ctx.lineTo(-this.size * 3, this.size + tailWag);
+        ctx.fill();
+
+        ctx.restore();
+    }
+}
+
+
 export function Contact() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -28,182 +202,11 @@ export function Contact() {
 
         // --- Physics & Entities ---
 
-        class Ripple {
-            x: number;
-            y: number;
-            radius: number;
-            maxRadius: number;
-            alpha: number;
-            speed: number;
 
-            constructor(x: number, y: number, isBig: boolean = false) {
-                this.x = x;
-                this.y = y;
-                this.radius = 0;
-                this.maxRadius = isBig ? 100 : 30;
-                this.alpha = isBig ? 0.8 : 0.3;
-                this.speed = isBig ? 1.5 : 0.8;
-            }
 
-            update() {
-                this.radius += this.speed;
-                this.alpha -= 0.01;
-            }
-
-            draw(ctx: CanvasRenderingContext2D) {
-                if (this.alpha <= 0) return;
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-
-        class Food {
-            x: number;
-            y: number;
-            size: number;
-            vy: number;
-            alpha: number;
-
-            constructor(x: number, y: number) {
-                this.x = x;
-                this.y = y;
-                this.size = 0;
-                this.vy = 0;
-                this.alpha = 1;
-            }
-
-            update() {
-                // Grow effect on spawn
-                if (this.size < 3) this.size += 0.2;
-            }
-
-            draw(ctx: CanvasRenderingContext2D) {
-                ctx.fillStyle = `rgba(189, 142, 108, ${this.alpha})`; // Brownish pellet
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        class Fish {
-            x: number;
-            y: number;
-            vx: number;
-            vy: number;
-            size: number;
-            color: string;
-            speed: number;
-            angle: number;
-            targetAngle: number;
-
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.angle = Math.random() * Math.PI * 2;
-                this.targetAngle = this.angle;
-                this.speed = 1 + Math.random() * 1;
-                this.vx = 0;
-                this.vy = 0;
-                this.size = 5 + Math.random() * 5;
-                const colors = ["#ff5733", "#f2f2f2", "#d32f2f", "#ffca28"];
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-            }
-
-            update(foods: Food[]) {
-                // Seek food logic
-                let targetX = this.x + Math.cos(this.angle) * 100;
-                let targetY = this.y + Math.sin(this.angle) * 100;
-                let chasing = false;
-
-                if (foods.length > 0) {
-                    let closestFood: Food | null = null;
-                    let minDist = 300; // Awareness radius
-
-                    for (const food of foods) {
-                        const dx = food.x - this.x;
-                        const dy = food.y - this.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < minDist) {
-                            minDist = dist;
-                            closestFood = food;
-                        }
-                    }
-
-                    if (closestFood) {
-                        targetX = closestFood.x;
-                        targetY = closestFood.y;
-                        chasing = true;
-
-                        // Interaction: Eat food
-                        if (minDist < 10) {
-                            const index = foods.indexOf(closestFood);
-                            if (index > -1) foods.splice(index, 1);
-                            // Ripple on eat
-                            ripples.push(new Ripple(this.x, this.y, false));
-                        }
-                    }
-                }
-
-                // Smooth rotation
-                const angleToTarget = Math.atan2(targetY - this.y, targetX - this.x);
-                let diff = angleToTarget - this.angle;
-                while (diff <= -Math.PI) diff += Math.PI * 2;
-                while (diff > Math.PI) diff -= Math.PI * 2;
-
-                // Turn speed
-                const turnSpeed = chasing ? 0.08 : 0.03;
-                this.angle += diff * turnSpeed;
-
-                // Speed adjustment
-                const targetSpeed = chasing ? 3.5 : 1.5;
-                this.speed += (targetSpeed - this.speed) * 0.05;
-
-                // Move
-                this.vx = Math.cos(this.angle) * this.speed;
-                this.vy = Math.sin(this.angle) * this.speed;
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Screen Wrap
-                const margin = 50;
-                if (this.x < -margin) this.x = width + margin;
-                if (this.x > width + margin) this.x = -margin;
-                if (this.y < -margin) this.y = height + margin;
-                if (this.y > height + margin) this.y = -margin;
-            }
-
-            draw(ctx: CanvasRenderingContext2D) {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-
-                // Body
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                // Simpler, elegant fish shape
-                ctx.ellipse(0, 0, this.size * 2, this.size * 0.8, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Tail (animated slightly)
-                const tailWag = Math.sin(Date.now() * 0.01) * 0.5;
-                ctx.beginPath();
-                ctx.moveTo(-this.size * 1.5, 0);
-                ctx.lineTo(-this.size * 3, -this.size + tailWag);
-                ctx.lineTo(-this.size * 3, this.size + tailWag);
-                ctx.fill();
-
-                ctx.restore();
-            }
-        }
-
-        const fishes = Array.from({ length: 12 }, () => new Fish());
-        let foods: Food[] = [];
-        let ripples: Ripple[] = [];
+        const fishes = Array.from({ length: 12 }, () => new Fish(width, height));
+        const foods: Food[] = [];
+        const ripples: Ripple[] = [];
 
         // Animation Loop
         const render = () => {
@@ -227,7 +230,7 @@ export function Contact() {
 
             // Fishes
             for (const fish of fishes) {
-                fish.update(foods);
+                fish.update(foods, ripples, width, height);
                 fish.draw(ctx);
             }
 
@@ -263,13 +266,13 @@ export function Contact() {
             }
         };
 
-        canvas.addEventListener("mousemove", handleMouseMove as any);
-        canvas.addEventListener("mousedown", handleClick as any);
+        canvas.addEventListener("mousemove", handleMouseMove as unknown as EventListener);
+        canvas.addEventListener("mousedown", handleClick as unknown as EventListener);
 
         return () => {
             window.removeEventListener("resize", setSize);
-            canvas.removeEventListener("mousemove", handleMouseMove as any);
-            canvas.removeEventListener("mousedown", handleClick as any);
+            canvas.removeEventListener("mousemove", handleMouseMove as unknown as EventListener);
+            canvas.removeEventListener("mousedown", handleClick as unknown as EventListener);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);
@@ -293,7 +296,7 @@ export function Contact() {
                     Say Hello.
                 </h2>
                 <p className="text-zinc-400 text-lg mb-8 max-w-md mx-auto mix-blend-difference">
-                    I'm currently available for freelance work and open collaborations.
+                    I&apos;m currently available for freelance work and open collaborations.
                     Drop a line, or just feed the fish.
                 </p>
 

@@ -56,7 +56,7 @@ export function Hero() {
                         transition={{ duration: 0.5, delay: 0.5 }}
                         className="mb-10 max-w-2xl text-lg text-zinc-400 sm:text-xl leading-relaxed font-light"
                     >
-                        "A fresh graduate pretending to know what I'm doing. I center divs for a living, copy-paste from <span className="line-through decoration-red-500 decoration-2 text-zinc-500">Documentation</span>  ChatGPT with style, and occasionally break production just to feel something."
+                        &quot;A fresh graduate pretending to know what I&apos;m doing. I center divs for a living, copy-paste from <span className="line-through decoration-red-500 decoration-2 text-zinc-500">Documentation</span>  ChatGPT with style, and occasionally break production just to feel something.&quot;
                     </motion.p>
 
                     <motion.div

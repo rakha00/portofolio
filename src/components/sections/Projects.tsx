@@ -229,13 +229,13 @@ export function Projects() {
                         Selected Works
                     </div>
                     <h2 className="text-3xl md:text-5xl font-bold text-white max-w-2xl leading-tight">
-                        Stuff I've Built <span className="text-indigo-500">.</span>
+                        Stuff I&apos;ve Built <span className="text-indigo-500">.</span>
                     </h2>
                 </div>
 
                 {/* Featured Projects */}
                 <div>
-                    {featuredProjects.map((project, index) => (
+                    {featuredProjects.map((project) => (
                         <FeaturedProject key={project.title} project={project} />
                     ))}
                 </div>
