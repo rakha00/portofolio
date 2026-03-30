@@ -32,7 +32,7 @@ export function About() {
 
                         <div className="space-y-6 text-lg text-zinc-400 leading-relaxed">
                             <p>
-                                I am a dedicated fresh graduate from <strong className="text-white font-medium">Gunadarma University (2025)</strong>, majoring in <strong className="text-white font-medium">Informatics</strong>.
+                                I graduated from <strong className="text-white font-medium">Gunadarma University (2025)</strong>, majoring in <strong className="text-white font-medium">Informatics</strong>, and I am now working as a <strong className="text-white font-medium">Software Engineer</strong>.
                                 My academic and practical background has equipped me with a strong foundation in software engineering and problem-solving strategies.
                             </p>
                             <p>
@@ -71,7 +71,7 @@ export function About() {
                             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[90%] lg:w-[120%] lg:bottom-6 bg-zinc-900/90 backdrop-blur-md border border-zinc-700/50 p-4 rounded-2xl shadow-2xl flex items-center justify-between gap-4 z-20">
                                 <div className="flex flex-col">
                                     <span className="text-xs text-zinc-400 font-mono uppercase tracking-wider">Experience</span>
-                                    <span className="text-white font-bold font-serif text-lg">Fresh Graduate</span>
+                                    <span className="text-white font-bold font-serif text-lg">Software Eng.</span>
                                 </div>
                                 <div className="h-8 w-[1px] bg-zinc-700"></div>
                                 <div className="flex flex-col items-end">
