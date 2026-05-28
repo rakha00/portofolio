@@ -2,8 +2,42 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export function About() {
+    const [experience, setExperience] = useState("3 Months");
+
+    useEffect(() => {
+        const startDate = new Date(2026, 1, 1); // February 2026 (0-indexed month 1)
+        const currentDate = new Date();
+        
+        let years = currentDate.getFullYear() - startDate.getFullYear();
+        let months = currentDate.getMonth() - startDate.getMonth();
+        
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        let durationStr = "";
+        if (years >= 1) {
+            if (months > 0) {
+                durationStr = `${years} Yr ${months} Mo`;
+            } else {
+                durationStr = `${years} Year${years > 1 ? 's' : ''}`;
+            }
+        } else {
+            durationStr = `${months} Month${months > 1 ? 's' : ''}`;
+        }
+
+        // Defer state update to avoid cascading synchronous renders lint error
+        const handle = setTimeout(() => {
+            setExperience(durationStr);
+        }, 0);
+
+        return () => clearTimeout(handle);
+    }, []);
+
     return (
         <section id="about" className="py-32 bg-zinc-950 relative overflow-hidden">
 
@@ -71,7 +105,7 @@ export function About() {
                             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[90%] lg:w-[120%] lg:bottom-6 bg-zinc-900/90 backdrop-blur-md border border-zinc-700/50 p-4 rounded-2xl shadow-2xl flex items-center justify-between gap-4 z-20">
                                 <div className="flex flex-col">
                                     <span className="text-xs text-zinc-400 font-mono uppercase tracking-wider">Experience</span>
-                                    <span className="text-white font-bold font-serif text-lg">Software Eng.</span>
+                                    <span className="text-white font-bold font-serif text-lg">{experience}</span>
                                 </div>
                                 <div className="h-8 w-[1px] bg-zinc-700"></div>
                                 <div className="flex flex-col items-end">
