@@ -69,7 +69,7 @@ const featuredProjects: Project[] = [
     role: "Frontend Developer",
     description:
       "A modern, premium restaurant franchise promotion website built with Next.js 16 and Tailwind CSS v4.",
-    tech: ["NextJs", "TypeScript", "Tailwind", "FramerMotion", "MDX"],
+    tech: ["NextJs", "TypeScript", "Tailwind", "FramerMotion", "MDX", "Concept Project"],
     images: [
       "/projects/mienewmind/mienewmind-1.webp",
       "/projects/mienewmind/mienewmind-2.webp",

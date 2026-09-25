@@ -45,7 +45,16 @@ const experiences: JobExperience[] = [
         title: "Gold Management System",
         roleName: "Backend Engineer",
         description:
-          "Currently in development mode. Designed and developed the backend architecture and API endpoints for managing internal trading data.",
+          "Designed and developed the backend architecture and API endpoints for managing internal trading data.",
+        imageSrc: "/projects/goldmanagementsystem/goldmanagementsystem-1.png",
+      },
+      {
+        id: "company-management-system",
+        title: "Company Management System",
+        roleName: "Fullstack Engineer",
+        description:
+          "Collaborated with the core team as an external contributor to implement end-to-end features, adjust and optimize existing modules, and redesign key UI interfaces.",
+        imageSrc: "/projects/companymanagementsystem/companymanagementsystem-1.png",
       },
     ],
   },
